@@ -11,6 +11,7 @@ int main()
 	system("Pause");
 	return 0;
 }
+
 vector<string> makedeck(){
 	vector<string> deck;
 	for (int rank = 1; rank < 14; rank++){
