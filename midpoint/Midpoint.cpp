@@ -5,6 +5,7 @@ using namespace std;
 
 double* midPoint(double x1, double y1, double x2, double y2);
 
+/*
 int main(){
 	double *result = midPoint(1.0, 2.0, 4.0, 5.0);
 	double correctanswer[2] = { 2.5, 3.5 };
@@ -16,6 +17,7 @@ int main(){
 	cin >> dummy;
 	return 0;
 }
+*/
 
 double* midPoint(double x1, double y1, double x2, double y2) {
 	double midpointholder[2];
