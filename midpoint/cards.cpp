@@ -43,7 +43,7 @@ void playgame(vector<string> deck, vector<int>order){
 		cout << "player draws a card: ";
 		printcard(deck, newcard);
 		int newcardsuit = getsuit(newcard);
-		/*if (hand.size() > 0){
+		if (hand.size() > 0){
 			cout << "players hand is \n";
 			printdeck(deck, hand);
 				//look at the last card in player hand and find suit
@@ -55,7 +55,7 @@ void playgame(vector<string> deck, vector<int>order){
 			}
 		}
 		//add new card to players hand
-		hand.push_back(newcard);*/
+		hand.push_back(newcard); 
 	}
 }
 int getsuit(int card){
