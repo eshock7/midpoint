@@ -17,7 +17,6 @@ int main()
 {
 	vector<string> deck = makedeck();
 	vector<int> order = shuffle();
-
 	playgame(deck, order);
 	system("Pause");
 	return 0;
