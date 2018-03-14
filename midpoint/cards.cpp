@@ -9,6 +9,9 @@ using namespace std;
 vector<string> makedeck();
 vector<int> shuffle();
 void playgame(vector<string>deck, vector<int> order);
+void clean_hand(vector<string> deck, vector<int>& hand);
+bool clean_every_other(vector<string> deck, vector<int>& hand);
+bool clean_neighbors(vector<string> deck, vector<int>& hand);
 void printdeck(vector<string>deck, vector<int> order);
 void printcard(vector<string>deck, vector<int> order, int card);
 int takecard(vector<int>& order);
@@ -23,7 +26,7 @@ int main()
 	return 0;
 }
 void printdeck(vector<string>deck, vector<int> order){
-	for (int i = 0; i <order.size(); i++){
+	for (unsigned int i = 0; i <order.size(); i++){
 		printcard(deck, order, i);
 	}
 }
@@ -37,27 +40,62 @@ void playgame(vector<string> deck, vector<int>order){
 	vector<int> hand;
 	//go until we run out of cards
 	while (order.size() > 0){
+		// Wait for player.
+		cout << endl;
 		system("Pause");
-		//take top card off the deck and find suit
+		system("cls");
+
+		//take top card off the deck and give it to player
 		int newcard = takecard(order);
-		cout << "player draws a card: ";
+		cout << "Player draws a card: ";
 		printcard(deck, newcard);
-		int newcardsuit = getsuit(newcard);
-		if (hand.size() > 0){
-			cout << "players hand is \n";
-			printdeck(deck, hand);
-				//look at the last card in player hand and find suit
-			int lastcard = hand.back();
-			int lastcardsuit = getsuit(lastcard);
-			//if suits are the same then throw last card from the players hand away
-			if (newcardsuit == lastcardsuit){
-				hand.pop_back();
-			}
-		}
-		//add new card to players hand
-		hand.push_back(newcard); 
+		cout << order.size() << " cards remaining." << endl;
+
+		// show user what they've got
+		cout << endl << "Player's hand:" << endl;
+		printdeck(deck, hand);
+		cout << endl;
+
+		// and add the new card to the hand
+		hand.push_back(newcard);
+
+		// remove cards according to the rules
+		clean_hand(deck, hand);
 	}
 }
+
+void clean_hand(vector<string> deck, vector<int>& hand){
+	bool changed = true;
+	while (changed) {
+		bool changed1 = clean_every_other(deck, hand);
+		bool changed2 = clean_neighbors(deck, hand);
+		changed = changed1 | changed2;
+	}
+}
+bool clean_every_other(vector<string> deck, vector<int>& hand){
+	for (int i = 0; i < ((int)hand.size()) - 2; i++){
+		if (getsuit(hand.at(i)) == getsuit(hand.at(i + 2))) {
+			cout << "Discarding ";
+			printcard(deck, hand.at(i));
+			hand.erase(hand.begin()+i);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool clean_neighbors(vector<string> deck, vector<int>& hand){
+	for (int i = 0; i < ((int)hand.size()) - 1; i++){
+		if (getsuit(hand.at(i)) == getsuit(hand.at(i + 1))) {
+			cout << "Discarding ";
+			printcard(deck, hand.at(i+1));
+			hand.erase(hand.begin() + i+1);
+			return true;
+		}
+	}
+	return false;
+}
+
 int getsuit(int card){
 	return card % 4;
 }
@@ -90,7 +128,7 @@ vector<string> makedeck(){
 			else if (suit == 3)
 				suitstring = "Hearts";
 			else
-				suitstring = "spades";
+				suitstring = "Spades";
 			string card = rankstring + " of " + suitstring;
 			deck.push_back(card);
 		}
@@ -102,7 +140,7 @@ vector<int> shuffle(){
 	for (int i = 0; i < 52; i++){
 		newdeck.push_back(i);
 	}
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	for (int i = 0; i < 52; i++){
 		int swapwith = rand() % 52;
 		int temp = newdeck[i];
