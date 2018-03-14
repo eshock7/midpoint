@@ -12,8 +12,8 @@ void playgame(vector<string>deck, vector<int> dealer);
 void clean_player(vector<string> deck, vector<int>& player);
 bool clean_every_other(vector<string> deck, vector<int>& player);
 bool clean_neighbors(vector<string> deck, vector<int>& player);
-void printdeck(vector<string>deck, vector<int> dealer);
-void printcard(vector<string>deck, vector<int> dealer, int card);
+void printdeck(vector<string>deck, vector<int> cards);
+void printcard(vector<string>deck, int card);
 int takecard(vector<int>& dealer);
 int getsuit(int card);
 int main()
@@ -21,20 +21,24 @@ int main()
 	vector<string> deck = makedeck();
 	vector<int> dealer = shuffle();
 
-	playgame(deck, dealer);
+	bool play_again = true;
+	while (play_again) {
+		playgame(deck, dealer);
+		cout << endl << "Do you want to play again? <y/n> ";
+		string ans;
+		cin >> ans;
+		if (ans == "n") play_again = false;
+	}
 	system("Pause");
 	return 0;
 }
-void printdeck(vector<string>deck, vector<int> dealer){
-	for (unsigned int i = 0; i <dealer.size(); i++){
-		printcard(deck, dealer, i);
+void printdeck(vector<string>deck, vector<int> cards){
+	for (unsigned int i = 0; i <cards.size(); i++){
+		printcard(deck, cards.at(i));
 	}
 }
 void printcard(vector<string>deck, int card){
 	cout << deck[card] << endl;
-}
-void printcard(vector<string>deck, vector<int> dealer, int card){
-	cout << deck[dealer[card]] << endl;
 }
 void playgame(vector<string> deck, vector<int>dealer){
 	vector<int> player;
@@ -52,7 +56,7 @@ void playgame(vector<string> deck, vector<int>dealer){
 		cout << dealer.size() << " cards remaining." << endl;
 
 		// show user what they've got
-		cout << endl << "Player's player:" << endl;
+		cout << endl << "Player's hand:" << endl;
 		printdeck(deck, player);
 		cout << endl;
 
@@ -61,6 +65,12 @@ void playgame(vector<string> deck, vector<int>dealer){
 
 		// remove cards according to the rules
 		clean_player(deck, player);
+	}
+	if (player.size() < 5){
+		cout << "You win!" << endl;
+	}
+	else {
+		cout << "You lose, too many cards..." << endl;
 	}
 }
 
