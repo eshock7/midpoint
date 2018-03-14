@@ -8,88 +8,88 @@ using namespace std;
 
 vector<string> makedeck();
 vector<int> shuffle();
-void playgame(vector<string>deck, vector<int> order);
-void clean_hand(vector<string> deck, vector<int>& hand);
-bool clean_every_other(vector<string> deck, vector<int>& hand);
-bool clean_neighbors(vector<string> deck, vector<int>& hand);
-void printdeck(vector<string>deck, vector<int> order);
-void printcard(vector<string>deck, vector<int> order, int card);
-int takecard(vector<int>& order);
+void playgame(vector<string>deck, vector<int> dealer);
+void clean_player(vector<string> deck, vector<int>& player);
+bool clean_every_other(vector<string> deck, vector<int>& player);
+bool clean_neighbors(vector<string> deck, vector<int>& player);
+void printdeck(vector<string>deck, vector<int> dealer);
+void printcard(vector<string>deck, vector<int> dealer, int card);
+int takecard(vector<int>& dealer);
 int getsuit(int card);
 int main()
 {
 	vector<string> deck = makedeck();
-	vector<int> order = shuffle();
+	vector<int> dealer = shuffle();
 
-	playgame(deck, order);
+	playgame(deck, dealer);
 	system("Pause");
 	return 0;
 }
-void printdeck(vector<string>deck, vector<int> order){
-	for (unsigned int i = 0; i <order.size(); i++){
-		printcard(deck, order, i);
+void printdeck(vector<string>deck, vector<int> dealer){
+	for (unsigned int i = 0; i <dealer.size(); i++){
+		printcard(deck, dealer, i);
 	}
 }
 void printcard(vector<string>deck, int card){
 	cout << deck[card] << endl;
 }
-void printcard(vector<string>deck, vector<int> order, int card){
-	cout << deck[order[card]] << endl;
+void printcard(vector<string>deck, vector<int> dealer, int card){
+	cout << deck[dealer[card]] << endl;
 }
-void playgame(vector<string> deck, vector<int>order){
-	vector<int> hand;
+void playgame(vector<string> deck, vector<int>dealer){
+	vector<int> player;
 	//go until we run out of cards
-	while (order.size() > 0){
+	while (dealer.size() > 0){
 		// Wait for player.
 		cout << endl;
 		system("Pause");
 		system("cls");
 
 		//take top card off the deck and give it to player
-		int newcard = takecard(order);
+		int newcard = takecard(dealer);
 		cout << "Player draws a card: ";
 		printcard(deck, newcard);
-		cout << order.size() << " cards remaining." << endl;
+		cout << dealer.size() << " cards remaining." << endl;
 
 		// show user what they've got
-		cout << endl << "Player's hand:" << endl;
-		printdeck(deck, hand);
+		cout << endl << "Player's player:" << endl;
+		printdeck(deck, player);
 		cout << endl;
 
-		// and add the new card to the hand
-		hand.push_back(newcard);
+		// and add the new card to the player
+		player.push_back(newcard);
 
 		// remove cards according to the rules
-		clean_hand(deck, hand);
+		clean_player(deck, player);
 	}
 }
 
-void clean_hand(vector<string> deck, vector<int>& hand){
+void clean_player(vector<string> deck, vector<int>& player){
 	bool changed = true;
 	while (changed) {
-		bool changed1 = clean_every_other(deck, hand);
-		bool changed2 = clean_neighbors(deck, hand);
+		bool changed1 = clean_every_other(deck, player);
+		bool changed2 = clean_neighbors(deck, player);
 		changed = changed1 | changed2;
 	}
 }
-bool clean_every_other(vector<string> deck, vector<int>& hand){
-	for (int i = 0; i < ((int)hand.size()) - 2; i++){
-		if (getsuit(hand.at(i)) == getsuit(hand.at(i + 2))) {
+bool clean_every_other(vector<string> deck, vector<int>& player){
+	for (int i = 0; i < ((int)player.size()) - 2; i++){
+		if (getsuit(player.at(i)) == getsuit(player.at(i + 2))) {
 			cout << "Discarding ";
-			printcard(deck, hand.at(i));
-			hand.erase(hand.begin()+i);
+			printcard(deck, player.at(i));
+			player.erase(player.begin()+i);
 			return true;
 		}
 	}
 	return false;
 }
 
-bool clean_neighbors(vector<string> deck, vector<int>& hand){
-	for (int i = 0; i < ((int)hand.size()) - 1; i++){
-		if (getsuit(hand.at(i)) == getsuit(hand.at(i + 1))) {
+bool clean_neighbors(vector<string> deck, vector<int>& player){
+	for (int i = 0; i < ((int)player.size()) - 1; i++){
+		if (getsuit(player.at(i)) == getsuit(player.at(i + 1))) {
 			cout << "Discarding ";
-			printcard(deck, hand.at(i+1));
-			hand.erase(hand.begin() + i+1);
+			printcard(deck, player.at(i+1));
+			player.erase(player.begin() + i+1);
 			return true;
 		}
 	}
@@ -99,9 +99,9 @@ bool clean_neighbors(vector<string> deck, vector<int>& hand){
 int getsuit(int card){
 	return card % 4;
 }
-int takecard(vector<int>& order){
-	int card = order.back();
-	order.pop_back();
+int takecard(vector<int>& dealer){
+	int card = dealer.back();
+	dealer.pop_back();
 	return card;
 }
 vector<string> makedeck(){
