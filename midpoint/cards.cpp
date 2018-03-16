@@ -16,8 +16,17 @@ void printdeck(vector<string>deck, vector<int> cards);
 void printcard(vector<string>deck, int card);
 int takecard(vector<int>& dealer);
 int getsuit(int card);
+//tells player instructions, and sets up game
 int main()
 {
+	cout << "Welcome to Mouradov Grandmothers Card Game!!!" << endl;
+	cout << "The rules to this game are simple."<< endl;
+	cout << "You will be dealt on card at a time." << endl;
+	cout << "If the card drawn matches the card previously drawn, then the most recent card drawn will be removed." << endl;
+	cout << "If the card drawn matches the card drawn before the previosly drawn card, then that card will be removed." << endl;
+	cout << "When all the cards have been drawn, and there are 4 or less cards in your hand, you will be declared the winner." << endl;
+	cout << "If there are more than four cards in your hand, you will be declared the loser and will be given a choice to restart or quit." << endl;
+	cout << "Now get ready to play!!!!." << endl;
 	vector<string> deck = makedeck();
 	vector<int> dealer = shuffle();
 
@@ -32,6 +41,7 @@ int main()
 	system("Pause");
 	return 0;
 }
+//sets up card deck
 void printdeck(vector<string>deck, vector<int> cards){
 	for (unsigned int i = 0; i <cards.size(); i++){
 		printcard(deck, cards.at(i));
@@ -40,6 +50,7 @@ void printdeck(vector<string>deck, vector<int> cards){
 void printcard(vector<string>deck, int card){
 	cout << deck[card] << endl;
 }
+//allows the player to play the game
 void playgame(vector<string> deck, vector<int>dealer){
 	vector<int> player;
 	//go until we run out of cards
@@ -66,6 +77,7 @@ void playgame(vector<string> deck, vector<int>dealer){
 		// remove cards according to the rules
 		clean_player(deck, player);
 	}
+	//declares win or loss
 	if (player.size() < 5){
 		cout << "You win!" << endl;
 	}
@@ -73,7 +85,7 @@ void playgame(vector<string> deck, vector<int>dealer){
 		cout << "You lose, too many cards..." << endl;
 	}
 }
-
+//goes through and clears cards, telling player which cards were cleared
 void clean_player(vector<string> deck, vector<int>& player){
 	bool changed = true;
 	while (changed) {
@@ -105,7 +117,7 @@ bool clean_neighbors(vector<string> deck, vector<int>& player){
 	}
 	return false;
 }
-
+//checks for a win
 int getsuit(int card){
 	return card % 4;
 }
@@ -114,6 +126,7 @@ int takecard(vector<int>& dealer){
 	dealer.pop_back();
 	return card;
 }
+//lists all cards and gets ready to shuffle them
 vector<string> makedeck(){
 	vector<string> deck;
 	for (int rank = 1; rank < 14; rank++){
@@ -145,6 +158,7 @@ vector<string> makedeck(){
 	}
 	return deck;
 }
+//shuffles card deck
 vector<int> shuffle(){
 	vector<int> newdeck;
 	for (int i = 0; i < 52; i++){
